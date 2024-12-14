@@ -141,7 +141,7 @@ agent.cuda()
 
 
 '''训练LOOP''' 
-MAX_EPISODE = 2000
+MAX_EPISODE = 20
 for episode in range(MAX_EPISODE):
     ## 重置回合奖励
     ep_reward = 0
