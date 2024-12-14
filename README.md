@@ -4,7 +4,7 @@
 
 ###### Thuật toán SAC-Auto có khả năng tùy chỉnh cao, hỗ trợ triển khai mô hình chiến lược, sao lưu quá trình huấn luyện, tích hợp quan sát từ nhiều nguồn, PER và các tính năng khác.
 
-**Bài báo:** "Soft Actor-Critic Algorithms and Applications" (arXiv: 1812) # không phải phiên bản 1801.
+**Bài báo:** "Dynamic Path Planning for Mobile Robots with Deep Reinforcement Learning"
 
 | Thành phần thuật toán     | Mô tả                           |
 | ------------------------ | ------------------------------ |
