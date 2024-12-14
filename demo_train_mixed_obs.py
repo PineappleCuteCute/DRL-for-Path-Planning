@@ -240,8 +240,8 @@ for episode in range(MAX_EPISODE):
         env.plot(f"./output/out{episode}.png")
 #end for
 agent.export("./path_plan_env/policy_dynamic.onnx") # 导出策略模型
-# agent.save("./checkpoint") # 存储算法训练进度
-# agent.load("./checkpoint") # 加载算法训练进度
+agent.save("./checkpoint") # 存储算法训练进度
+agent.load("./checkpoint") # 加载算法训练进度
 
 
 
