@@ -294,7 +294,7 @@ $$
 
 ##### 2. Kết quả mô phỏng
 
-<img src="图片/Result.png" style="zoom:80%;" />
+<img src="image/Result.png" style="zoom:80%;" />
 
 ### (2). Môi Trường Lập Lộ Trình Động (DynamicPathPlanning)
 
@@ -302,7 +302,7 @@ $$
 
 ##### 0. Mô hình cảm nhận từ radar
 
-<img src="图片/Lidar.gif" style="zoom:200%;" />
+<img src="image/Lidar.gif" style="zoom:200%;" />
 
 Phát ra n tia laser, mô hình dữ liệu đo khoảng cách từ radar:
 
@@ -396,13 +396,13 @@ $$
 
 ##### 3. Kết quả huấn luyện
 
-<img src="图片/amagi1.png" alt="img" style="zoom: 67%;" />
+<img src="image/amagi1.png" alt="img" style="zoom: 67%;" />
 
-<img src="图片/amagi2.png" alt="img" style="zoom: 80%;" />
+<img src="image/amagi2.png" alt="img" style="zoom: 80%;" />
 
 ##### 4. Kết quả mô phỏng
 
-<img src="图片/Result.gif" style="zoom: 50%;" />
+<img src="image/Result.gif" style="zoom: 50%;" />
 
 ## II. **Yêu cầu**:
 
