@@ -265,6 +265,17 @@ $$
 ##### 1. Không gian quan sát và không gian hành động
 
 1.0 **Không gian quan sát** (BoxSpace):
+# Bounding Box Example
+
+Biểu diễn một hình hộp trong không gian 2D:
+
+![Bounding Box](bounding_box.png)
+
+Biểu thức toán học liên quan:
+
+$$
+\mathbf{s} = \mathbf{o} \subset \text{Box} \left \{ x_{0},y_{0},\dots x_{n-1},y_{n-1}  \right \}
+$$
 
 $$
 \mathbf{s} = \mathbf{o} \subset \text{Box} \left \{ x_{0},y_{0},\dots x_{n-1},y_{n-1}  \right \}

@@ -168,8 +168,8 @@ for episode in range(MAX_EPISODE):
     #end for
 #end for
 agent.export("./path_plan_env/policy_static.onnx") # 导出策略模型
-agent.save("./checkpoint") # 存储算法训练进度
-agent.load("./checkpoint") # 加载算法训练进度
+agent.save("./training_backup") # 存储算法训练进度
+agent.load("./training_backup") # 加载算法训练进度
 
 
 
