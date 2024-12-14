@@ -266,9 +266,8 @@ $$
 
 1.0 **Không gian quan sát** (BoxSpace):
 
-$$
-\mathbf{s} = \mathbf{o} \subset \text{Box} \left \{ x_{0},y_{0},\dots x_{n-1},y_{n-1}  \right \}
-$$
+$\mathbf{a} \subset \text{Box} \left\{ dx_{0},dy_{0},\dots dx_{n-1},dy_{n-1} \right\}$
+
 
 | **Không gian quan sát** | n=6                             |
 | :--------------------- | :------------------------------ |
