@@ -25,7 +25,7 @@ __all__ = ["DynamicPathPlanning", "StaticPathPlanning", "NormalizedActionsWrappe
 
 #----------------------------- ↓↓↓↓↓ 地图设置 ↓↓↓↓↓ ------------------------------#
 class MAP:
-    size = [[-10.0, -10.0], [10.0, 10.0]] # x, z最小值; x, z最大值
+    size = [[-20.0, -20.0], [20.0, 20.0]] # x, z最小值; x, z最大值
     start_pos = [0, -9]                   # 起点坐标
     end_pos = [2.5, 9]                    # 终点坐标
     obstacles = [                         # 障碍物, 要求为 geo.Polygon 或 带buffer的 geo.Point/geo.LineString
