@@ -1,34 +1,34 @@
 # -*- coding: utf-8 -*-
 """
-策略训练示例
- Created on Sat Nov 04 2023 15:37:28
- Modified on 2023-11-4 15:37:28
+Ví dụ huấn luyện chiến lược
+ Tạo vào ngày Sat Nov 04 2023 15:37:28
+ Sửa đổi vào 2023-11-4 15:37:28
  
- @auther: HJ https://github.com/zhaohaojie1998
+ @tác giả: HJ https://github.com/zhaohaojie1998
 """
 #
 
 
-'''算法定义'''
+'''Định nghĩa thuật toán'''
 import numpy as np
 import torch as th
 import torch.nn as nn
 from copy import deepcopy
 from sac_agent import *
-# 1.定义经验回放（取决于观测和动作数据结构）
+# 1. Định nghĩa bộ nhớ hồi tưởng (Tùy thuộc vào cấu trúc dữ liệu quan sát và hành động)
 class Buffer(BaseBuffer):
     def __init__(self, memory_size, obs_space, act_space):
         super(Buffer, self).__init__()
-        # 数据类型表示
+        # Kiểu dữ liệu
         self.device = 'cuda'
         self.obs_space = obs_space
         self.act_space = act_space
-        # buffer属性
-        self._ptr = 0    # 当前位置
-        self._idxs = [0] # PER记住上一次采样位置, 一维list或ndarray
-        self._memory_size = int(memory_size) # 总容量
-        self._current_size = 0               # 当前容量
-        # buffer容器
+        # Thuộc tính bộ nhớ
+        self._ptr = 0    # Vị trí hiện tại
+        self._idxs = [0] # PER ghi nhớ vị trí mẫu lần trước, danh sách một chiều hoặc ndarray
+        self._memory_size = int(memory_size) # Dung lượng tổng
+        self._current_size = 0               # Dung lượng hiện tại
+        # Bộ nhớ container
         self._data = {}
         self._data["points"] = np.empty((memory_size, *obs_space['seq_points'].shape), dtype=obs_space['seq_points'].dtype)
         self._data["points_"] = deepcopy(self._data["points"])
@@ -55,9 +55,9 @@ class Buffer(BaseBuffer):
         self._data["points_"][self._ptr] = transition[3]['seq_points']
         self._data["vector_"][self._ptr] = transition[3]['seq_vector']
         self._data["done"][self._ptr] = transition[4]
-        # update
-        self._ptr = (self._ptr + 1) % self._memory_size                     # 更新指针
-        self._current_size = min(self._current_size + 1, self._memory_size) # 更新容量
+        # Cập nhật
+        self._ptr = (self._ptr + 1) % self._memory_size                     # Cập nhật con trỏ
+        self._current_size = min(self._current_size + 1, self._memory_size) # Cập nhật dung lượng
 
     def __len__(self):
         return self._current_size 
@@ -82,17 +82,18 @@ class Buffer(BaseBuffer):
     def state_to_tensor(self, state, use_rnn=False):
         return {'seq_points': th.FloatTensor(state['seq_points']).unsqueeze(0).to(self.device),
                 'seq_vector': th.FloatTensor(state['seq_vector']).unsqueeze(0).to(self.device)}
+
     
 
-# 2.定义神经网络（取决于观测数据结构）
-# 混合观测编码器
+# 2. Định nghĩa mạng nơ-ron (Tùy thuộc vào cấu trúc dữ liệu quan sát)
+# Bộ mã hóa quan sát hỗn hợp
 class EncoderNet(nn.Module):
     def __init__(self, obs_space, feature_dim):
         super(EncoderNet, self).__init__()
-        # 点云测距编码
+        # Mã hóa điểm mây
         c, cnn_dim = obs_space['seq_points'].shape
         in_kernel_size = min(cnn_dim//2, 8)
-        in_stride = min(cnn_dim-in_kernel_size, 4)
+        in_stride = min(cnn_dim - in_kernel_size, 4)
         self.cnn = nn.Sequential(
             nn.Conv1d(c, 32, kernel_size=in_kernel_size, stride=in_stride, padding=0),
             nn.ReLU(inplace=True),
@@ -107,7 +108,7 @@ class EncoderNet(nn.Module):
             nn.Linear(cnn_out_dim, feature_dim),
             nn.ReLU(True),
         )
-        # 状态向量编码
+        # Mã hóa trạng thái vector
         _, rnn_dim = obs_space['seq_vector'].shape
         rnn_hidden_dim = 256
         rnn_num_layers = 1
@@ -120,17 +121,17 @@ class EncoderNet(nn.Module):
             nn.Linear(rnn_hidden_dim, feature_dim),
             nn.ReLU(True),
         )
-        # 特征融合网络
+        # Mạng kết hợp đặc trưng
         self.fusion = nn.Sequential(
-            nn.Linear(2*feature_dim, feature_dim),
+            nn.Linear(2 * feature_dim, feature_dim),
             nn.ReLU(True),
         )
 
     def forward(self, obs):
-        f1 = self.cnn_mlp(self.cnn(obs['seq_points'])) # batch, dim
-        f2_n, _ = self.rnn(self.rnn_mlp1(obs['seq_vector']), None) # batch, seq, dim
-        f2 = self.rnn_mlp2(f2_n[:, -1, :]) # batch, dim
-        return self.fusion(th.cat([f1, f2], dim=-1)) # batch, dim
+        f1 = self.cnn_mlp(self.cnn(obs['seq_points']))  # batch, dim
+        f2_n, _ = self.rnn(self.rnn_mlp1(obs['seq_vector']), None)  # batch, seq, dim
+        f2 = self.rnn_mlp2(f2_n[:, -1, :])  # batch, dim
+        return self.fusion(th.cat([f1, f2], dim=-1))  # batch, dim
     
     @staticmethod
     def _get_cnn_out_dim(cnn: nn.Module, input_shape: tuple[int, ...]):
@@ -139,12 +140,12 @@ class EncoderNet(nn.Module):
         output = cnn_copy(th.zeros(1, *input_shape))
         return int(np.prod(output.size()))
 
-# Q函数
+# Hàm Q
 class QNet(nn.Module):
     def __init__(self, feature_dim, act_dim):
         super(QNet, self).__init__()
         self.mlp = nn.Sequential(
-            nn.Linear(feature_dim+act_dim, 256),
+            nn.Linear(feature_dim + act_dim, 256),
             nn.ReLU(True),
             nn.Linear(256, 256),
             nn.ReLU(True),
@@ -154,7 +155,7 @@ class QNet(nn.Module):
     def forward(self, feature_and_action):
         return self.mlp(feature_and_action)
 
-# 策略函数
+# Hàm chính sách
 class PiNet(nn.Module):
     def __init__(self, feature_dim, act_dim):
         super(PiNet, self).__init__()
@@ -169,7 +170,7 @@ class PiNet(nn.Module):
 
 
 
-'''实例化环境'''
+'''Khởi tạo môi trường'''
 from path_plan_env import DynamicPathPlanning
 env = DynamicPathPlanning()
 obs_space = env.observation_space
@@ -177,11 +178,11 @@ act_space = env.action_space
 
 
 
-'''实例化算法'''
-# 1.缓存设置
+'''Khởi tạo thuật toán'''
+# 1. Cài đặt bộ nhớ
 buffer = Buffer(100000, obs_space, act_space)
 
-# 2.神经网络设置
+# 2. Cài đặt mạng nơ-ron
 actor = SAC_Actor(
         EncoderNet(obs_space, 256),
         PiNet(256, act_space.shape[0]),
@@ -193,55 +194,58 @@ critic = SAC_Critic(
         QNet(256, act_space.shape[0]),
     )
 
-# 3.算法设置
+
+# 3. Cài đặt thuật toán
 agent = SAC_Agent(env, batch_size=2048)
 agent.set_buffer(buffer)
 agent.set_nn(actor, critic)
 agent.cuda()
 
-
-
-'''训练LOOP'''
-from torch.utils.tensorboard import SummaryWriter # TensorBoard, 启动!!!
+'''VÒNG LẶP HUẤN LUYỆN'''
+from torch.utils.tensorboard import SummaryWriter # TensorBoard, khởi động!!!
 log = SummaryWriter(log_dir = "./tb_log") 
 
 MAX_EPISODE = 100
 LEARN_FREQ = 100
 OUTPUT_FREQ = 50
 for episode in range(MAX_EPISODE):
-    ## 重置回合奖励
+    ## Đặt lại phần thưởng cho mỗi vòng
     ep_reward = 0
-    ## 获取初始观测
+    ## Lấy quan sát ban đầu
     obs = env.reset()
-    ## 进行一回合仿真
+    ## Tiến hành một vòng mô phỏng
     for steps in range(env.max_episode_steps):
-        # 决策
+        # Quyết định hành động
         act = agent.select_action(obs)
-        # 仿真
+        # Mô phỏng môi trường
         next_obs, reward, done, info = env.step(act)
         ep_reward += reward
-        # 缓存
+        # Lưu vào bộ nhớ
         agent.store_memory((obs, act, reward, next_obs, done))
-        # 回合结束
+        # Kiểm tra kết thúc vòng
         if info["terminal"]:
             mean_reward = ep_reward / (steps + 1)
-            print('回合: ', episode,'| 累积奖励: ', round(ep_reward, 2),'| 平均奖励: ', round(mean_reward, 2),'| 状态: ', info,'| 步数: ', steps) 
+            print('Vòng lặp: ', episode, '| Tổng phần thưởng: ', round(ep_reward, 2), '| Phần thưởng trung bình: ', round(mean_reward, 2), '| Trạng thái: ', info, '| Số bước: ', steps)
             break
         else:
             obs = deepcopy(next_obs)
-    #end for
-    ## 记录
+    # Kết thúc vòng lặp
+
+    ## Ghi lại dữ liệu vào TensorBoard
     log.add_scalar('Return', ep_reward, episode)
     log.add_scalar('MeanReward', mean_reward, episode)
-    ## 训练
+    
+    ## Huấn luyện mô hình
     if episode % LEARN_FREQ == 0:
         train_info = agent.learn()
     if episode % OUTPUT_FREQ == 0:
         env.plot(f"./output/out{episode}.png")
-#end for
-agent.export("./path_plan_env/policy_dynamic.onnx") # 导出策略模型
-agent.save("./checkpoint") # 存储算法训练进度
-agent.load("./checkpoint") # 加载算法训练进度
+
+# Kết thúc vòng lặp huấn luyện
+agent.export("./path_plan_env/policy_dynamic.onnx") # Xuất mô hình chính sách
+agent.save("./checkpoint") # Lưu tiến trình huấn luyện thuật toán
+agent.load("./checkpoint") # Tải lại tiến trình huấn luyện thuật toán
+
 
 
 
@@ -269,5 +273,5 @@ r'''
         ======`-.____`-.___\_____/___.-`____.-'======
                            `=---='
         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                    佛祖保佑       永无BUG
+            Phật tổ bảo vệ       Mãi không có BUG
 '''
