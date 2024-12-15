@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 """
 Chú thích loại RL
- Được tạo vào ngày Sat Nov 04 2023 15:37:28
- Được chỉnh sửa vào 2023-11-4 15:37:28
- 
- Tác giả: HJ https://github.com/zhaohaojie1998
+
+Tạo: Ngày 12 tháng 12 năm 2024, 17:54:17
+Cập nhật: Ngày 12 tháng 12 năm 2024
+
+Tác giả: Đào Thành Mạnh
+GitHub: https://github.com/PineappleCuteCute
 """
 import numpy as np
 import torch as th

@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Thuật toán SAC-Auto
- Được tạo vào ngày Fri Mar 03 2023 19:58:10
- Được chỉnh sửa vào 2023-3-3 19:58:
-     
- Tác giả: HJ https://github.com/zhaohaojie1998
+Môi trường học tăng cường cho bài toán lập kế hoạch đường đi.
+
+Tạo: Ngày 12 tháng 12 năm 2024, 17:54:17
+Cập nhật: Ngày 12 tháng 12 năm 2024
+
+Tác giả: Đào Thành Mạnh
+GitHub: https://github.com/PineappleCuteCute
 """
 # Chạy trên GPU #
 from rl_typing import *

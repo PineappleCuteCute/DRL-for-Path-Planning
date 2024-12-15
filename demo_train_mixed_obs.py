@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Ví dụ huấn luyện chiến lược
- Tạo vào ngày Sat Nov 04 2023 15:37:28
- Sửa đổi vào 2023-11-4 15:37:28
- 
- @tác giả: HJ https://github.com/zhaohaojie1998
+Môi trường học tăng cường cho bài toán lập kế hoạch đường đi.
+
+Tạo: Ngày 12 tháng 12 năm 2024, 17:54:17
+Cập nhật: Ngày 12 tháng 12 năm 2024
+
+Tác giả: Đào Thành Mạnh
+GitHub: https://github.com/PineappleCuteCute
 """
 #
 
