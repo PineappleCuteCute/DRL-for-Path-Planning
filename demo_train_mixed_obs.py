@@ -207,7 +207,7 @@ agent.cuda()
 from torch.utils.tensorboard import SummaryWriter # TensorBoard, khởi động!!!
 log = SummaryWriter(log_dir = "./tb_log") 
 
-MAX_EPISODE = 100
+MAX_EPISODE = 1000
 LEARN_FREQ = 100
 OUTPUT_FREQ = 50
 for episode in range(MAX_EPISODE):
@@ -245,8 +245,8 @@ for episode in range(MAX_EPISODE):
 
 # Kết thúc vòng lặp huấn luyện
 agent.export("./path_plan_env/policy_dynamic.onnx") # Xuất mô hình chính sách
-agent.save("./checkpoint") # Lưu tiến trình huấn luyện thuật toán
-agent.load("./checkpoint") # Tải lại tiến trình huấn luyện thuật toán
+#agent.save("./checkpoint") # Lưu tiến trình huấn luyện thuật toán
+#agent.load("./checkpoint") # Tải lại tiến trình huấn luyện thuật toán
 
 
 

@@ -50,6 +50,13 @@ class MAP:
         geo.Polygon([(-10, 0), (-10, 5), (-7.5, 5), (-7.5, 0)])  # Vật cản 4
     ]
 
+    # Thêm vật cản mới
+    obstacles.append(geo.Point(4, 4).buffer(2))  # Vật cản 5 (hình tròn bán kính 2)
+    obstacles.append(geo.Polygon([(-5, 1), (-4, 3), (-3, 2), (-4, 1)]))  # Vật cản 6 (đa giác)
+    obstacles.append(geo.Point(-8, -2).buffer(1.5))  # Vật cản 7 (hình tròn bán kính 1.5)
+    obstacles.append(geo.Polygon([(-3, 4), (-2, 5), (-1, 3.5), (-2, 2.5)]))  # Vật cản 8 (đa giác)
+
+
     @classmethod
     def show(cls):
         """
