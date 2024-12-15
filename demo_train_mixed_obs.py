@@ -205,7 +205,7 @@ agent.cuda()
 from torch.utils.tensorboard import SummaryWriter # TensorBoard, 启动!!!
 log = SummaryWriter(log_dir = "./tb_log") 
 
-MAX_EPISODE = 50000
+MAX_EPISODE = 100
 LEARN_FREQ = 100
 OUTPUT_FREQ = 50
 for episode in range(MAX_EPISODE):
